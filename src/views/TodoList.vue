@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'darkmode':mode='dark'}">
+    <div > <!--class:darkmode-->
         <div class="session-connect">
             <p >WELCOME</p>
             <button @click="signOut" >Sign Out🔒 </button>
@@ -7,22 +7,22 @@
         <header>
             <div class="container">
                 <div class="header-content">
-                    <h1 :class="{'color-title':mode='dark'}">T O D O - L I S T</h1>
+                    <h1 >T O D O - L I S T</h1> <!-- class:color-title -->
                     <div>
-                        <Sun @click="mode ='sun'" v-if="mode==='dark'"/>
-                        <Moon @click="mode = 'dark'" v-else-if="mode==='sun'"/>
+                        <Sun @click="mode ='dark'" v-if="mode==='sun'"/>
+                        <Moon @click="mode = 'sun'" v-else-if="mode==='dark'"/>
                     </div>
                 </div>
             </div>
-            <img v-if="mode==='sun'" src="@/assets/night.jpeg" alt="image" />
-            <img v-else-if="mode==='dark'" src="@/assets/cat7.jpeg" alt="image"/>
+            <img v-if="mode==='dark'" src="@/assets/night.jpeg" alt="image" />
+            <img v-else-if="mode==='sun'" src="@/assets/cat7.jpeg" alt="image"/>
         </header>
         <main>
             <section class="toDoList">
                 <div class="container">
                     <div class="toDoList-content">
                         <div class="to-do-list">
-                            <div class="input"><input type="text" v-model="ListTask.task" class="list" :class="{'white':mode==='dark'}" placeholder="create a new task"/></div>
+                            <div class="input"><input type="text" v-model="ListTask.task" class="list" placeholder="create a new task"/></div> <!-- class:white -->
                             <button @click="addListTask(ListTask)" >Add</button>
                         </div>
                         
