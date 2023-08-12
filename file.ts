@@ -1,0 +1,2 @@
+export const SUPABASE_URL= "https://kplsirhfxoofngmikbst.supabase.co"
+export const SUPABASE_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtwbHNpcmhmeG9vZm5nbWlrYnN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTE1Njg3NzMsImV4cCI6MjAwNzE0NDc3M30.Sekf6gtizG7s9UpVjcZ3aDmZjW0RNB3X2zbLAEWLFxc"
