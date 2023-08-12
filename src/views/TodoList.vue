@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'darkmode':mode=false}">
+    <div :class="{'darkmode':mode='dark'}">
         <div class="session-connect">
             <p >WELCOME</p>
             <button @click="signOut" >Sign Out🔒 </button>
@@ -7,22 +7,22 @@
         <header>
             <div class="container">
                 <div class="header-content">
-                    <h1 :class="{'color-title':mode=true}">T O D O - L I S T</h1>
+                    <h1 :class="{'color-title':mode='dark'}">T O D O - L I S T</h1>
                     <div>
-                        <Sun @click="mode===(true)" v-if="mode=false"/>
-                        <Moon @click="mode===(false)" v-else="mode=true"/>
+                        <Sun @click="mode ='sun'" v-if="mode==='dark'"/>
+                        <Moon @click="mode = 'dark'" v-else-if="mode==='sun'"/>
                     </div>
                 </div>
             </div>
-            <img v-if="mode=true" src="@/assets/night.jpeg" alt="image" />
-            <img v-else src="@/assets/cat7.jpeg" alt="image"/>
+            <img v-if="mode==='sun'" src="@/assets/night.jpeg" alt="image" />
+            <img v-else-if="mode==='dark'" src="@/assets/cat7.jpeg" alt="image"/>
         </header>
         <main>
             <section class="toDoList">
                 <div class="container">
                     <div class="toDoList-content">
                         <div class="to-do-list">
-                            <div class="input"><input type="text" v-model="ListTask.task" class="list" :class="{'white':mode===true}" placeholder="create a new task"/></div>
+                            <div class="input"><input type="text" v-model="ListTask.task" class="list" :class="{'white':mode==='dark'}" placeholder="create a new task"/></div>
                             <button @click="addListTask(ListTask)" >Add</button>
                         </div>
                         
@@ -52,6 +52,8 @@ import Moon from '@/components/icons/Moon.vue'
 import Save from '@/components/icons/Save.vue'
 import Sun from '@/components/icons/Sun.vue'
 import Star from '@/components/icons/Star.vue'
+import { useLocalStorage } from "@vueuse/core"
+import {defineStore} from "pinia"
 import { useListTaskStore } from "@/stores/listTask";
 import {useUserStore} from '@/stores/users'
 import router from '@/router'
@@ -61,11 +63,9 @@ import { supabase } from '@/lib/supabase';
 import type { ListTask } from "@/types/listTask";
 
 const status=ref(false)
-const mode=ref(false)
+const mode=ref('dark')
 const {initialiseListTask,filterTask, addListTask} = useListTaskStore()
 const {listTasks}= storeToRefs(useListTaskStore()) 
-/* const {user} = storeToRefs(useUserStore()) */
-
 
 onMounted( async()=>{
     await initialiseListTask()
@@ -98,6 +98,16 @@ function updateStatus(element:ListTask){
 
     Status()
 }
+function deleteTask(element:ListTask){
+    console.log('supprimer')
+    async function Delete() {
+        const {error} = await supabase
+        .from("TaskList")
+        .delete()
+        .eq('id',element.id)
+    }
+    Delete()
+}
 
 async function signOut(){
     const{error}= await supabase.auth.signOut()
@@ -109,17 +119,6 @@ async function signOut(){
     }
 }
 
-
-/* const tab=ref([
-    
-])
-    
-function deleteTask(element:ListTask){
-    const index= tab.value.findIndex((item)=>item.name==listTasks.value)
-    if(index!==-1)
-        tab.value.splice(index,1)
-} 
- */
 const ListTask=ref<ListTask>({
     task:'',
     status:false,
@@ -229,6 +228,7 @@ header img{
     border-radius: 5px;
     border: 1px solid grey;
     background-color: transparent;
+    color: grey;
 }
 .white{
     color: white;
