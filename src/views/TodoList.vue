@@ -1,5 +1,5 @@
 <template>
-    <div > <!--class:darkmode-->
+    <div :class="mode==='sun'? 'darkmode':''"> <!--class:darkmode-->
         <div class="session-connect">
             <p >WELCOME</p>
             <button @click="signOut" >Sign Out🔒 </button>
@@ -7,7 +7,7 @@
         <header>
             <div class="container">
                 <div class="header-content">
-                    <h1 >T O D O - L I S T</h1> <!-- class:color-title -->
+                    <h1 :class="mode==='dark'? 'color-title':''">T O D O - L I S T</h1> <!-- class:color-title -->
                     <div>
                         <Sun @click="mode ='dark'" v-if="mode==='sun'"/>
                         <Moon @click="mode = 'sun'" v-else-if="mode==='dark'"/>
@@ -22,7 +22,7 @@
                 <div class="container">
                     <div class="toDoList-content">
                         <div class="to-do-list">
-                            <div class="input"><input type="text" v-model="ListTask.task" class="list" placeholder="create a new task"/></div> <!-- class:white -->
+                            <div class="input"><input type="text" v-model="ListTask.task" class="list"  placeholder="create a new task"/></div> <!-- class:white -->
                             <button @click="addListTask(ListTask)" >Add</button>
                         </div>
                         
@@ -128,7 +128,7 @@ const ListTask=ref<ListTask>({
 
 <style scoped>
 .darkmode{
-    background-color: rgb(8, 7, 8);
+    background-color: rgb(20, 17, 20);
     width: 100%;
     min-height: 100vh;
 }
@@ -149,7 +149,7 @@ h1{
 }
 header img{
     width: 100%;
-    max-height: 400px;
+    max-height: 500px;
     object-fit: cover;
     filter: invert(30%);
 }
