@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <img v-if="mode==='dark'" src="@/assets/night.jpeg" alt="image" />
+            <img v-if="mode==='dark'" src="@/assets/day.jpeg" alt="image" />
             <img v-else-if="mode==='sun'" src="@/assets/cat7.jpeg" alt="image"/>
         </header>
         <main>
@@ -28,7 +28,7 @@
                         
                         <div  class= "ListTask"  v-for="element in listTasks">
                             <p :class="element.status? 'color':''" >{{ element.task}}</p>
-                            <input type="checkbox"  :checked="element.status" @input="updateStatus(element)"  title="task finished" v-model="element.status">
+                            <input type="checkbox"  :checked="element.status!=element.status" @input="updateStatus(element)"  title="task finished" v-model="element.status">
                             <div class="line"><input class="date" v-model="element.date" type="date"><Save title="save" @click="updateDate(element)"></Save></div>
                             <Trash  @click="deleteTask(element)"></Trash>
                         </div>
