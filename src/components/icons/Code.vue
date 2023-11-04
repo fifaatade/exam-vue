@@ -1,30 +1,18 @@
 <template>
     <div class="page">
         <div class="container">
-            <form  @submit.prevent="registration">
+            <h1>Veuillez consulter vos mail pour récupérer le code de validation:</h1>
+            <form @submit.prevent="validate">
                 <div class="form-content">
-                    <label for="firstName">firstName:</label>
-                    <input type="text" v-model="userData.firstName" placeholder="firstname">
+                    <label for="email">Code:</label>
+                    <input type="number" v-model="codeOdt.code">
                 </div>
                 <div class="form-content">
-                    <label for="lastName">lastName:</label>
-                    <input type="text" v-model="userData.lastName" placeholder="lastname">
-                </div>
-                <div class="form-content">
-                    <label for="email">Email:</label>
-                    <input type="email" v-model="userData.email" placeholder="fifa@gmail.com">
-                </div>
-                <div class="form-content">            
-                    <label for="password">password:</label>
-                    <input type="password" v-model="userData.password">
-                </div>
-                <div class="form-content">
-                    <button type="submit">S'inscrire <Loader/> </button>
+                    <button type="submit" >Valider l'inscription <Loader/> </button>
                 </div>
                 <div class="connexion-link">
-                    <RouterLink to ="/connexion">I have account</RouterLink>
+                    <RouterLink to ="Connexion">I have account</RouterLink>
                 </div>
-                <RouterView/>
             </form>
         </div>
     </div>
@@ -37,13 +25,13 @@ import { storeToRefs } from 'pinia';
 import router from '@/router';
 import Loader from '@/components/icons/Loader.vue';
 
-
-const { registration } = useUserStore()
-const { userData, vueUserData } = storeToRefs(useUserStore())
+const { validate } = useUserStore()
+const { codeOdt, codeData } = storeToRefs(useUserStore())
 
 onMounted(() => {
-    registration
+    validate
 })
+
 </script>
 
 <style scoped>
@@ -52,11 +40,17 @@ onMounted(() => {
     margin: 0 auto;
     padding: 5px 8px;
 }
+h1{
+    color: white;
+    text-align: center;
+    margin: 30px 0;
+}
 form{
     box-shadow: 7px 7px 7px 7px  white;
     width: 35%;
     margin: 20px auto;
     background-color: white;
+
 }
 .form-content{
     display: flex;
@@ -82,8 +76,8 @@ button{
     background-color: rgb(56, 54, 54) ;
     cursor: pointer;
     display: flex;
-    align-items: center;
     justify-content: space-evenly;
+    align-items: center;
 
 }
 button:hover{

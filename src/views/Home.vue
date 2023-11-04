@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <h1>WELCOME TO YOUR ToDoList💢 💫  </h1>
         <div class="connexion-link">
             <RouterLink replace to="/connexion" title="connect you">signIn</RouterLink>
             <RouterLink replace to="/inscription" title="create account">singnUp</RouterLink>
@@ -10,9 +9,7 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-/* function gotoConnexion(){
-    router.push('/Profile2')
-} */
+
 </script>
 
 <style scoped>

@@ -1,17 +1,17 @@
 <template>
     <div class="page">
         <div class="container">
-            <form @submit.prevent="connect">
+            <form @submit.prevent="connection">
                 <div class="form-content">
                     <label for="email">Email:</label>
-                    <input type="email" v-model="userData.email"  placeholder="fifa@gmail.com">
+                    <input type="email" v-model="data.email"  placeholder="fifa@gmail.com">
                 </div>
                 <div class="form-content">            
                     <label for="password">password:</label>
-                    <input type="password" v-model="userData.password" >
+                    <input type="password" v-model="data.password" >
                 </div>
                 <div class="form-content">
-                    <button type="submit" >Se connecter</button>
+                    <button type="submit" >Se connecter <Loader/> </button>
                 </div>
                 <div class="connexion-link">
                     <RouterLink to ="Inscription">I don't have account</RouterLink>
@@ -22,29 +22,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/users';
-import { supabase } from '@/lib/supabase';
+import { storeToRefs } from 'pinia';
 import router from '@/router';
-import { Inscription } from '@/types/inscriptions';
-const {addUser} = useUserStore()
-const userData=ref({
-    email:"",
-    password:"",
+import Loader from './Loader.vue';
+
+const { connection } = useUserStore()
+const { data, vueConnectData } = storeToRefs(useUserStore())
+
+onMounted(() => {
+    connection
 })
 
-async function connect (){
-    const {data, error} = await supabase.auth.signInWithPassword({
-        email: userData.value.email,
-        password: userData.value.password,
-})
-if(error){
-    console.log('mot de passe ou email erronné')
-}
-else{
-    router.replace('/todo')
-}
-}
 </script>
 
 <style scoped>
@@ -83,6 +73,9 @@ button{
     color: white;
     background-color: rgb(56, 54, 54) ;
     cursor: pointer;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 button:hover{
     color: white;
@@ -105,6 +98,5 @@ a:hover{
     text-decoration: underline;
     color: rgb(13, 24, 2);
 }
-
 
 </style>

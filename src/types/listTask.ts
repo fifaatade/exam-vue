@@ -2,6 +2,6 @@ export type ListTask={
     id?:number;
     date: Date;
     task:string;
-    id_user?:number;
+    user_id:string;
     status:boolean;
 }

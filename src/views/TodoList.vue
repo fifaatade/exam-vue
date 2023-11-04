@@ -22,11 +22,11 @@
                 <div class="container">
                     <div class="toDoList-content">
                         <div class="to-do-list">
-                            <div class="input"><input type="text" v-model="ListTask.task" class="list"  placeholder="create a new task"/></div> <!-- class:white -->
-                            <button @click="addListTask(ListTask)" >Add</button>
+                            <div class="input"><input type="text" v-model="task" class="list"  placeholder="create a new task"/></div> <!-- class:white -->
+                            <button @click="addListTask()" >Add</button>
                         </div>
                         
-                        <div  class= "ListTask"  v-for="element in listTasks">
+                        <div  class= "ListTask"  v-for="element in tasklist">
                             <p :class="element.status? 'color':''" >{{ element.task}}</p>
                             <input type="checkbox"  :checked="element.status!=element.status" @input="updateStatus(element)"  title="task finished" v-model="element.status">
                             <div class="line"><input class="date" v-model="element.date" type="date"><Save title="save" @click="updateDate(element)"></Save></div>
@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts" setup>
+
 import Trash from "@/components/icons/Trash.vue"
 import Moon from '@/components/icons/Moon.vue'
 import Save from '@/components/icons/Save.vue'
@@ -61,15 +62,48 @@ import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { supabase } from '@/lib/supabase';
 import type { ListTask } from "@/types/listTask";
+import { useAxios } from "@/composable/useAxios"
+
+const { data, vueConnectData } = storeToRefs(useUserStore())
+
+
+
+import http from '@/lib/http';
+import { useToast } from 'vue-toast-notification';
+
+const $toast = useToast()
 
 const status=ref(false)
 const mode=ref('dark')
-const {initialiseListTask,filterTask, addListTask} = useListTaskStore()
-const {listTasks}= storeToRefs(useListTaskStore()) 
+const {filterTask, } = useListTaskStore()
 
-onMounted( async()=>{
-    await initialiseListTask()
-})
+const tasklist = ref(
+          {        
+            task:'',
+            status:'',
+            date:''
+          }      
+      ); 
+      async function initialiseListTask(){
+          const response = await useAxios().get('/todo/tasklist');
+          tasklist.value = response.data; 
+      }
+      initialiseListTask();
+
+const task = ref('')
+      async function addListTask() {
+        try {
+            const data = {
+                task: task.value
+            };
+            await useAxios().post('/todo/sendtask', data);
+            console.log(data);
+          }
+          catch (error) {
+              console.log("Erreur d'envoi : " + error);
+          }
+      };
+
 
 function updateDate(element:ListTask){
     console.log('ok');
@@ -122,7 +156,7 @@ async function signOut(){
 const ListTask=ref<ListTask>({
     task:'',
     status:false,
-    date: Date,
+    date: new Date,
 })
 </script>
 

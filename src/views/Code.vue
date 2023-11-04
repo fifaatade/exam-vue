@@ -1,11 +1,10 @@
 <template>
     <div class="page">
-        <ConnexionForm/>
+        <Code/>
     </div>
-
 </template>
 <script lang="ts" setup>
-import ConnexionForm from '@/components/icons/ConnexionForm.vue';
+import Code from '@/components/icons/Code.vue';
 
 </script>
 <style scoped>

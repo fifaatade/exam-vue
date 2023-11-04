@@ -1,31 +1,104 @@
-import {defineStore} from "pinia";
-import { ref } from "vue";
-import { supabase } from "@/lib/supabase";
 import type { ListTask } from "@/types/listTask";
+import { defineStore } from "pinia";
+import { computed, ref } from 'vue'
+import http from "@/lib/http"
+import {useAxios} from "@/composable/useAxios"
+import { clientHttp } from "@/composable/useAxios";
+import router from '@/router';
+import { required, email, sameAs } from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+import axios from 'axios'
+import { useToast } from 'vue-toast-notification';
+
 export const useListTaskStore = defineStore("listTask",()=>{
-    const listTasks = ref<ListTask[]>([]);
 
-    async function initialiseListTask() {
-        const {data,error} = await supabase.from("TaskList").select("*");
-        if (data){
-            listTasks.value = data;
+/*     const listTasksRequired = computed(() => {
+        return {
+            task: {
+                required
+            }
         }
-    }
-    async function filterTask() {
-        const {data,error} = await supabase.from("TaskList").select("*").eq("status",true);
-        if (data){
-            listTasks.value = data;
-        }
-    }
+    })
+    const vueTaskData = useVuelidate(listTasksRequired, tasklist)
 
-    async function addListTask(listTask:ListTask) {
-        const{data, error} = await supabase.from("TaskList").insert(listTask).select("*");
-        if(data){
-            listTasks.value.push(data[0]);
-        }
-    }
+    const token = localStorage.getItem('token');
+ */
+    /* async function initialiseListTask() {
+        const response = await http.get('/todo/tasklist', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        listTasks.value = response.data;
+      }
+       */
+      const tasklist = ref(
+          {        
+            task:'',
+            status:'',
+            date:''
+          }      
+      ); 
+      async function initialiseListTask(){
+          const response = await useAxios().get('/todo/tasklist');
+          tasklist.value = response.data; 
+      }
+      initialiseListTask();
+      
+      const task = ref('')
+      async function addListTask() {
+        try {
+            const data = {
+                task: task.value
+            };
+            await useAxios().post('/todo/sendtask', data);
+            console.log(data);
+          }
+          catch (error) {
+              console.log("Erreur d'envoi : " + error);
+          }
+      };
+/*       async function addListTask(listTask: ListTask) {
+        const response = await http.post('/todo/sendtask', listTask, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        listTasks.value.push(response.data);
+      } */
 
-    return{listTasks, initialiseListTask,filterTask,addListTask};
+
+      async function filterTask() {
+        const response = await http.get('/todo/completed', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        listTasks.value = response.data;
+      }
+      
+
+
+      function updateDate(element: ListTask) {
+        http.put(`/todo/${element.id}`, {
+          date: element.date,
+        });
+      }
+
+      function updateStatus(element: ListTask) {
+        http.put(`/todo/${element.id}`, {
+          status: element.status,
+        });
+      }
+      
+      
+
+    return{tasklist,task, initialiseListTask,filterTask,addListTask,updateDate,updateStatus};
     
 })
+
+
+
+
 
